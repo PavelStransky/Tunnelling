@@ -1,0 +1,8 @@
+# created by setup.jl for the local Julia version
+Manifest.toml
+Manifest-v*.toml
+
+# output folders of the scripts
+eisenbud_wigner_*/
+exact_twa_overlap_*/
+origin_*/
