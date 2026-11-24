@@ -556,10 +556,13 @@ function run_width(par, sigma0::Float64)
     O_tot, O_L, O_R, Nq_L, Nq_R, Nc_L, Nc_R, Wc2_T, Wc2_L, Wc2_R, Neff_T, Neff_L, Neff_R = series
 
     # ---------- derived quantities ----------
-    # FF = O/(‖W_q‖‖W_c‖), ‖W_q‖ = N_q/√(2πħ) (pure state), ‖W_c‖ = √(∫∫ W_c²)
+    # FF = O/max(‖W_q‖², ‖W_c‖²), ‖W_q‖² = N_q²/(2πħ) (pure state), ‖W_c‖² = ∫∫ W_c²;
+    # FF ≤ 1 (Cauchy–Schwarz), = 1 only for W_q = W_c, so FF also penalises different norms
     Nq_tot = Nq_L .+ Nq_R
-    fidelity(O, Nq, Wc2, Neff) =
-        @. ifelse(Nq > 0 && Wc2 > 0 && Neff ≥ neff_min, O * sqrt(2π * ħ) / (Nq * sqrt(Wc2)), NaN)
+    function fidelity(O, Nq, Wc2, Neff)
+        D = max.(Nq .^ 2 ./ (2π * ħ), Wc2)
+        return @. ifelse(D > 0 && Neff ≥ neff_min, O / D, NaN)
+    end
     FF_tot = fidelity(O_tot, Nq_tot, Wc2_T, Neff_T)
     FF_L   = fidelity(O_L, Nq_L, Wc2_L, Neff_L)
     FF_R   = fidelity(O_R, Nq_R, Wc2_R, Neff_R)
@@ -581,7 +584,7 @@ function run_width(par, sigma0::Float64)
     open(joinpath(out_folder, "xyz.txt"), "w") do io
         println(io, "# Regular grid: ", time_axis == :scaled ? "(x_free, E)" : "(t, E)",
                     "; x_free = x0 + p0 t/m is the position of the free packet")
-        println(io, "# FF = O/(NN_q*NN_c), NN_q^2 = int W_q^2 = Nq^2/(2*pi*hbar), NN_c^2 = int W_c^2 = Wc2;",
+        println(io, "# FF = O/max(NN_q^2, NN_c^2), NN_q^2 = int W_q^2 = Nq^2/(2*pi*hbar), NN_c^2 = int W_c^2 = Wc2;",
                     " FF = NaN where Neff < ", neff_min)
         println(io, "# x_free\tt\tE\tFF_total\tFF_left\tFF_right\tO_total\tO_left\tO_right\t",
                     "Nq_left\tNq_right\tNc_left\tNc_right\tWc2_total\tWc2_left\tWc2_right\t",
@@ -641,7 +644,7 @@ function run_width(par, sigma0::Float64)
         X_axis  = time_axis == :scaled ? x_free_axis[1, :] : t_mat[1, :]
         X_label = time_axis == :scaled ? "x_free = x0 + p0 t/m" : "t"
         for (file, Z, title, kw) in
-                (("FF_total.png", FF_tot, "FF_total = ∫∫W_qW_c / (‖W_q‖‖W_c‖)", (clims = (0, 1),)),
+                (("FF_total.png", FF_tot, "FF_total = ∫∫W_qW_c / max(‖W_q‖², ‖W_c‖²)", (clims = (0, 1),)),
                  ("FF_left.png", FF_L, "FF_left (x ≲ $(x_split))", (clims = (0, 1),)),
                  ("FF_right.png", FF_R, "FF_right (x ≳ $(x_split))", (clims = (0, 1),)),
                  ("Nq_right.png", log10.(max.(Nq_R, 1e-300)), "log10 N_q,right", (;)),

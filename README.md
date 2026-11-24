@@ -12,7 +12,7 @@ approximation (TWA) extended by instantaneous tunnelling.
 | [common.jl](common.jl) | shared library: potentials, Gaussian packet, Wigner transform, TWA trajectories with tunnelling, Numerov scattering states, output | all |
 | [wigner_origin.jl](wigner_origin.jl) | exact and TWA Wigner functions `Wq`, `Wc` at selected times, energy contours, boost factors `1/P` of the transmitted part | Fig. 2 |
 | [wigner_free_origin.jl](wigner_free_origin.jl) | contours `W = c·W_max` of the free packet (contour `c` encloses probability `1 − c`) | Fig. 2 |
-| [exact_twa_overlap.jl](exact_twa_overlap.jl) | overlap `F` (`FF` in the code) of the exact and TWA Wigner functions behind the barrier, maps over (`x_free`, `E0`) | Fig. 3 |
+| [exact_twa_overlap.jl](exact_twa_overlap.jl) | fidelity `F` (`FF` in the code) of the exact and TWA Wigner functions behind the barrier, maps over (`x_free`, `E0`) | Fig. 3 |
 | [ff_at_xfree.jl](ff_at_xfree.jl) | `F(E0)` at a single position `x_free` of the free packet | Fig. 3 |
 | [eisenbud_wigner.jl](eisenbud_wigner.jl) | delay `τ(E0)` of the transmitted packet, exact and TWA; Eisenbud–Wigner–Smith time `ħ dφ/dE`; transmission probabilities | Fig. 4 |
 
@@ -87,10 +87,14 @@ Some defaults in the scripts differ from the paper. For example, `exact_twa_over
   scattered state at `t₁` with the free packet at `t₂` (for pure states
   `|⟨ψ_free(t₂)|ψ(t₁)⟩|²/2πħ`). It is evaluated when the free packet is at `x_final`. The TWA delay
   uses the same overlap with the transmitted TWA branches (`x > x_R`, `p > 0`).
-- **Overlap F (Fig. 3):** `F = ∫∫ Wq Wc dx dp / (‖Wq‖ ‖Wc‖)`, `‖W‖² = ∫∫ W² dx dp`. The exact `Wq`
-  (from stationary states) is evaluated at the TWA trajectory points. The region behind the
-  barrier is selected by a smooth window `f(x)` that rises from 0 to 1 over `x_split ± ℓ_split`:
-  ψ is multiplied by `√f` and the TWA weights by `f`.
+- **Fidelity F (Fig. 3):** `F = ∫∫ Wq Wc dx dp / max(‖Wq‖², ‖Wc‖²)`, `‖W‖² = ∫∫ W² dx dp`.
+  By the Cauchy–Schwarz inequality `F ≤ 1`, with equality only for `Wq = Wc`. Dividing by the
+  larger squared norm (not by `‖Wq‖ ‖Wc‖`) makes `F` drop also when the two norms differ, e.g.
+  when the TWA puts a different probability behind the barrier. The exact `Wq` (from stationary
+  states) is evaluated at the TWA trajectory points. `‖Wq‖² = Nq²/2πħ` (pure state, `Nq = ∫|ψ|² dx`
+  in the region) and `‖Wc‖²` follows from the trajectory weights by Liouville's theorem. The region
+  behind the barrier is selected by a smooth window `f(x)` that rises from 0 to 1 over
+  `x_split ± ℓ_split`: ψ is multiplied by `√f` and the TWA weights by `f`.
 
 ## Numerical notes
 
