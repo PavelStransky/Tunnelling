@@ -30,13 +30,6 @@ const V2 = Potential(:V2, x -> (1 + x^2) * exp(-x^2), x -> -2 * x^3 * exp(-x^2))
 const V3 = Potential(:V3, x -> (0.5 + 2.156 * x^2) * exp(-x^2),
                      x -> (2 * 2.156 * x - 2 * x * (0.5 + 2.156 * x^2)) * exp(-x^2))
 
-const V_Glasnakova = Potential(:V_Glasnakova, x -> 1.4 * (x / 4)^2 * exp(-(x / 4)^2),
-                               x -> 1.4 * (2 * x / 16) * exp(-(x / 4)^2) * (1 - (x / 4)^2))
-
-const V_Glasnakova_gauss = Potential(:V_Glasnakova_gauss,
-                                     x -> (5.32 / (sqrt(pi) * 3.0)) * exp(-((x / 3.0)^2)),
-                                     x -> -2 * x / 3.0^2 * (5.32 / (sqrt(pi) * 3.0)) * exp(-((x / 3.0)^2)))
-
 const V_double = Potential(:V_double, x -> 0.6 * (exp(-(x - 4.0)^2) + exp(-(x + 4.0)^2)),
                            x -> 0.6 * (-2 * (x - 4.0) * exp(-(x - 4.0)^2) - 2 * (x + 4.0) * exp(-(x + 4.0)^2)))
 
