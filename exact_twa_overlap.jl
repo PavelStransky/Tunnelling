@@ -16,7 +16,7 @@ params = (
 
     # initial Gaussian packet; one run (and output folder) per width
     x0_init = -30.0,
-    sigmas  = (0.5, 1.0, 3.0),
+    sigmas  = (1.0, 2.0, 3.0, 5.0),
 
     # energy sweep
     n_energies = 301,
@@ -48,7 +48,7 @@ params = (
 
     # "left"/"right" parts: smooth window of half-width ℓ_split around x_split
     x_split = 30.0,
-    ℓ_split = 0.5,
+    ℓ_split = 0.0,
 
     # trajectories
     dt                  = 0.1,          # largest time step (times scale as √m)

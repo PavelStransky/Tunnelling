@@ -42,8 +42,9 @@ Real-valued parameters must be floats (`m = 100.0`, not `m = 100`). Energy maps 
 
 | quantity | value | parameter |
 |---|---|---|
-| units | ħ = 1, m = 100 | `ħ`, `m` |
-| potentials | V₁ = exp(−x²), V₂ = (1 + x²) exp(−x²) | `potential = V1`, `V2` |
+| units | $\hbar=1, m=100$ | `ħ`, `m` |
+| potentials | $V_{1} = \exp\left(-\frac{x^{2}}{s_{1}^{2}}\right), V_{2} = \left(1 + \frac{x^{2}}{s_{2}^{2}}\right) \exp\left(−\frac{x^{2}}{s_{2}^{2}}\right), s_{1}=1, s_{2}=\frac{2}{3}$ | `potential = V1`, `V2` |
+| normalization | $\int_{-\infty}^{\infty}V_1(x)dx=\int_{-\infty}^{\infty}V_{2}(x)dx=\sqrt{\pi}$ | |
 | initial position | x₀ = −30 | `x0_init` |
 | widths | σx = 0.71, 1.41, 2.12 | `sigma0` / `sigmas` = 1.0, 2.0, 3.0 |
 | Fig. 2 | E₀ = 0.4; σx = 0.71 and 2.12 | `E0`, `sigma0` |

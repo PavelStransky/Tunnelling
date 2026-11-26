@@ -25,7 +25,9 @@ const V0 = Potential(:V0, x -> 0.0, x -> 0.0)
 
 const V1 = Potential(:V1, x -> exp(-x^2), x -> -2 * x * exp(-x^2))
 
-const V2 = Potential(:V2, x -> (1 + x^2) * exp(-x^2), x -> -2 * x^3 * exp(-x^2))
+const V2orig = Potential(:V2, x -> (1 + x^2) * exp(-x^2), x -> -2 * x^3 * exp(-x^2))
+
+const V2 = Potential(:V2, x -> (1 + 9.0 * x^2 / 4.0) * exp(-9.0 * x^2 / 4.0), x -> -81.0 / 8.0 * x^3 * exp(-9.0 * x^2 / 4.0))
 
 const V3 = Potential(:V3, x -> (0.5 + 2.156 * x^2) * exp(-x^2),
                      x -> (2 * 2.156 * x - 2 * x * (0.5 + 2.156 * x^2)) * exp(-x^2))
